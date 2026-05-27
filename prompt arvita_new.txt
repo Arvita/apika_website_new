@@ -1,0 +1,356 @@
+Saya sedang membangun ulang website akademik arvitaagusk.com.
+
+Konteks utama:
+Website lama adalah arvitaagusk.com, berbasis Laravel. Tujuan rebuild bukan mengganti identitas website lama, tapi membuat versi baru yang lebih clean, humanis, SEO-friendly, nyaman untuk belajar, membaca jurnal, menonton video, dan tetap mempertahankan konten lama.
+
+Domain dan SEO technical yang sudah dibahas:
+- Domain utama dipilih: https://arvitaagusk.com/ tanpa www.
+- Redirect 301 dari www ke non-www sudah diatur lewat .htaccess.
+- Canonical sudah ditambahkan di template Laravel dan sudah muncul saat dicek lewat view-source:https://arvitaagusk.com/
+- APP_URL sebaiknya:
+  APP_URL=https://arvitaagusk.com
+- Canonical di Laravel idealnya dibuat di layout utama, bukan ditulis manual di setiap Blade.
+- Redirect dan canonical dianggap selesai.
+
+Masalah SEO website lama:
+- Homepage lama terlalu template-like.
+- H1 lama terbaca buruk oleh crawler: “H i, I'm A rvita...” karena huruf dipisah dengan span.
+- Ada typo “Lecture” harusnya “Lecturer”.
+- Hero lama ada di template utama sehingga muncul di banyak halaman, termasuk course page. Ini buruk untuk SEO karena halaman course kehilangan fokus H1.
+- Meta description lama terlalu generik: “Portofolio”.
+- Title halaman banyak yang generik.
+- Konten research lama terlalu berupa definisi umum, belum terasa personal akademik.
+- Halaman course/jurnal perlu dibuat lebih nyaman dibaca dan lebih SEO-friendly.
+
+Repo:
+- Repo lama/source lama: https://github.com/Arvita/arvitaagusk_new.git
+- Repo baru untuk rebuild: https://github.com/Arvita/apika_website_new/
+- Repo baru dibuat agar tidak bentrok dengan production lama.
+- Rekomendasi sebelumnya: repo baru dibuat fresh Laravel, development di branch baru, jangan langsung ubah production.
+
+Stack yang sudah diputuskan:
+- Laravel 10, karena hosting sebelumnya pakai PHP 8.1 dan Laravel 10 aman untuk PHP 8.1.
+- Blade, bukan React/Inertia, karena SEO lebih sederhana dan crawlable.
+- Tailwind CSS.
+- Alpine.js ringan untuk interaksi seperti dark mode, language switcher, mobile nav.
+- MySQL.
+- Vite.
+- Admin custom Blade atau bisa dipertimbangkan Filament nanti, tapi awalnya cukup custom admin.
+- Jangan gunakan template Bootstrap/SaaS lama yang berat dan terlalu template.
+
+Konsep desain final:
+Nama konsep: Human Academic Learning Hub.
+
+Preferensi desain:
+- Clean tapi tidak dingin.
+- Tidak terlalu resmi/kaku.
+- Tidak terlalu ceria/warna-warni.
+- Tidak terlihat seperti AI dashboard.
+- Tidak monoton card-grid semua.
+- Layout lebih beragam/asimetris ringan.
+- Warna utama: cream, sage green, warm brown, clay/gold lembut.
+- Ada light mode dan dark mode.
+- Nuansa seperti ruang kerja dosen atau academic reading hub.
+- Website harus nyaman untuk:
+  1. Mahasiswa belajar materi.
+  2. Pembaca membaca jurnal/publikasi.
+  3. Pengunjung menonton video pembelajaran.
+  4. Melihat portfolio, research, dan bimbingan mahasiswa.
+
+Desain visual yang dipilih:
+- Human Academic sebagai dasar utama.
+- Ambil sedikit gaya Notebook Course untuk halaman course/materi.
+- Journal section jangan hanya list data jurnal, tapi harus punya pengalaman baca yang nyaman.
+- Video section jangan hanya embed YouTube, tapi seperti video room/playlist.
+- Backend juga harus responsive dan clean.
+
+Fitur penting:
+1. Dual bahasa:
+   - Indonesia dan English.
+   - Menu dan judul konten harus bisa bilingual.
+   - Untuk awal cukup pakai kolom:
+     title_id, title_en
+     description_id, description_en
+     content_id, content_en
+   - Tidak perlu sistem translation kompleks dulu.
+
+2. Light/Dark mode:
+   - Toggle terang/gelap.
+   - Dark mode tetap warm academic, bukan neon/AI.
+   - Simpan preferensi user di localStorage.
+
+3. Responsive frontend dan backend:
+   - Frontend nyaman di desktop, tablet, mobile.
+   - Backend admin juga responsive.
+   - Desktop admin boleh sidebar + table.
+   - Mobile admin pakai stacked cards/action button besar.
+
+4. Konten lama harus tetap ada:
+   - Course/materi lama.
+   - Jurnal/publikasi.
+   - SINTA.
+   - Google Scholar.
+   - Scopus.
+   - Bimbinganku/supervised students.
+   - Video/YouTube.
+   - Portfolio.
+   - Research areas.
+   - Contact/social links.
+
+Struktur frontend yang diinginkan:
+- Home
+- Tentang / About
+- Belajar / Courses
+- Course detail
+- Material detail per minggu
+- Jurnal / Publications
+- Publication detail
+- Video
+- Riset / Research
+- Portfolio
+- Bimbinganku / Supervision
+- Kontak / Contact
+
+Struktur backend admin:
+- /admin
+- /admin/courses
+- /admin/materials
+- /admin/publications
+- /admin/videos
+- /admin/portfolio
+- /admin/supervisions
+- /admin/academic-links
+- /admin/settings
+
+Model/tabel utama yang direncanakan:
+- courses
+- course_materials
+- publications
+- videos
+- portfolios
+- supervisions
+- academic_links
+- site_settings
+
+Konten academic links wajib:
+- SINTA
+- Google Scholar
+- Scopus
+- GitHub
+- YouTube
+- Email
+- Bimbinganku / Supervisions
+
+Homepage ideal:
+- Navbar bilingual + dark mode.
+- Hero human academic:
+  “Belajar, membaca, dan menonton dengan nyaman.”
+  atau English:
+  “Learn, read, and watch comfortably.”
+- CTA:
+  “Mulai belajar”
+  “Baca jurnal”
+- Quick access:
+  SINTA, Scholar, Scopus, Bimbinganku.
+- Mode/section utama:
+  Belajar
+  Jurnal
+  Video
+- Learning paths:
+  Pemrograman Dasar
+  Object-Oriented Programming
+  Microsoft Office
+- Journal preview:
+  bukan hanya tabel, tapi preview abstract/citation/year/field/link.
+- Video preview:
+  featured video + playlist.
+- Research strip:
+  Web Development, IoT, Image Processing, AR, Knowledge Discovery, Educational Technology.
+- Footer lengkap.
+
+Course page ideal:
+- H1 unik sesuai course.
+- Intro 300–500 kata.
+- Tujuan pembelajaran.
+- Daftar minggu/material.
+- Navigasi next/previous.
+- FAQ.
+- Related video.
+- Related publication kalau ada.
+- SEO title/meta/canonical per halaman.
+
+Publication/journal page ideal:
+- Bisa filter/search.
+- Tampilan nyaman dibaca, bukan sekadar database.
+- Ada title, year, field, abstract preview, citation, DOI/link, SINTA/Scholar/Scopus link kalau relevan.
+- Detail publication punya:
+  title
+  abstract
+  keywords
+  publication year
+  journal/conference name
+  DOI/link
+  citation format
+  related course/material
+  related video
+  related supervision jika ada.
+
+Video page ideal:
+- Featured video.
+- Playlist.
+- Durasi.
+- Topik.
+- Ringkasan.
+- Related course/material.
+- Link YouTube.
+
+Admin backend ideal:
+- Clean Human Academic style, bukan default Breeze yang terlalu polos.
+- CRUD untuk:
+  Courses
+  Course Materials
+  Publications
+  Videos
+  Portfolio
+  Supervisions/Bimbinganku
+  Academic Links
+  Site Settings
+- Form bilingual.
+- Field SEO per konten:
+  meta_title_id/en
+  meta_description_id/en
+  slug
+  canonical optional
+  og_image optional
+- Responsive.
+
+SEO requirements:
+- Dynamic title.
+- Dynamic meta description.
+- Canonical.
+- robots index, follow, max-image-preview:large.
+- OpenGraph.
+- Twitter card.
+- Schema:
+  Person untuk homepage/about.
+  Course untuk course.
+  ScholarlyArticle untuk publication detail.
+  VideoObject untuk video detail.
+  BreadcrumbList untuk detail pages.
+- Sitemap.xml.
+- Robots.txt.
+- Redirect URL lama ke URL baru bila path berubah.
+- H1 hanya satu per halaman dan harus natural/readable.
+- Jangan pecah huruf nama/profesi dengan span yang membuat crawler membaca aneh.
+
+Rekomendasi route awal Laravel:
+Route::get('/', [HomeController::class, 'index'])->name('home');
+Route::get('/about', [PageController::class, 'about'])->name('about');
+Route::get('/research', [PageController::class, 'research'])->name('research');
+Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
+Route::get('/courses/{slug}', [CourseController::class, 'show'])->name('courses.show');
+Route::get('/courses/{course:slug}/{material:slug}', [CourseMaterialController::class, 'show'])->name('materials.show');
+Route::get('/publications', [PublicationController::class, 'index'])->name('publications.index');
+Route::get('/publications/{slug}', [PublicationController::class, 'show'])->name('publications.show');
+Route::get('/videos', [VideoController::class, 'index'])->name('videos.index');
+Route::get('/portfolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+Route::get('/supervisions', [SupervisionController::class, 'index'])->name('supervisions.index');
+Route::get('/contact', [PageController::class, 'contact'])->name('contact');
+
+Admin prefix:
+Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
+    Route::view('/', 'admin.dashboard')->name('dashboard');
+    Route::resource('courses', AdminCourseController::class);
+    Route::resource('materials', AdminCourseMaterialController::class);
+    Route::resource('publications', AdminPublicationController::class);
+    Route::resource('videos', AdminVideoController::class);
+    Route::resource('portfolio', AdminPortfolioController::class);
+    Route::resource('supervisions', AdminSupervisionController::class);
+    Route::resource('academic-links', AdminAcademicLinkController::class);
+});
+
+Lang strategy:
+- Bisa pakai URL prefix nanti jika perlu: /id dan /en.
+- Untuk awal bisa pakai session/localStorage toggle bahasa, tapi SEO lebih bagus kalau URL bahasa eksplisit.
+- Rekomendasi SEO bilingual:
+  /id/belajar
+  /en/courses
+  dengan hreflang.
+- Tapi implementasi awal boleh dibuat sederhana dulu asal konten sudah punya field ID/EN.
+
+Development plan:
+Sprint 1 — Foundation:
+- Install Laravel 10.
+- Install Breeze Blade untuk auth.
+- Setup Tailwind.
+- Buat layout frontend Human Academic.
+- Buat layout admin.
+- Buat SEO component.
+- Buat language helper.
+- Buat dark mode toggle.
+
+Sprint 2 — Frontend:
+- Navbar bilingual.
+- Home page.
+- Learning paths.
+- Journal preview.
+- Video preview.
+- Academic links.
+- Footer.
+
+Sprint 3 — Data + Admin:
+- Migration + model untuk courses, materials, publications, videos, portfolio, supervisions, academic_links, site_settings.
+- CRUD admin.
+
+Sprint 4 — SEO:
+- Dynamic meta.
+- Schema JSON-LD.
+- Sitemap.
+- Robots.
+- Redirect mapping URL lama.
+
+Sprint 5 — Content migration:
+- Pindahkan course lama.
+- Pindahkan publikasi.
+- Pindahkan portfolio.
+- Pindahkan SINTA/Scholar/Scopus.
+- Pindahkan Bimbinganku.
+- Pindahkan video YouTube.
+
+Perintah awal yang disarankan:
+git clone https://github.com/Arvita/apika_website_new.git
+cd apika_website_new
+
+composer create-project laravel/laravel:^10.0 temp_laravel
+cp -a temp_laravel/. .
+rm -rf temp_laravel
+
+npm install
+
+git add .
+git commit -m "Initial Laravel 10 project setup"
+git push origin main
+
+Lalu:
+composer require laravel/breeze --dev
+php artisan breeze:install blade
+npm install
+npm run build
+
+git add .
+git commit -m "Install Blade authentication scaffolding"
+git push
+
+Buat branch:
+git checkout -b feature/human-academic-rebuild
+git push -u origin feature/human-academic-rebuild
+
+Instruksi untuk assistant baru:
+- Jangan mulai dari nol tanpa mempertimbangkan konteks di atas.
+- Utamakan arsitektur Laravel/Blade/Tailwind yang maintainable.
+- Jangan pakai desain terlalu AI-dashboard.
+- Jangan menghapus eksistensi konten lama.
+- Buat kode modular: layout, components, sections.
+- Prioritaskan SEO dan kenyamanan baca.
+- Saat memberi kode, berikan file path yang jelas.
+- Kerjakan bertahap, mulai dari foundation dan layout.
