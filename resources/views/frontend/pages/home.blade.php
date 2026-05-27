@@ -6,95 +6,101 @@
 
     $copy = [
         'id' => [
-            'seoTitle' => 'Arvita Agus Kurniasari | Website Akademik dan Materi Pembelajaran',
+            'seoTitle' => 'Arvita Agus Kurniasari | Materi Informatika, Publikasi, dan Karya Akademik',
             'seoDescription' =>
-                'Website akademik Arvita Agus Kurniasari untuk materi kuliah, publikasi ilmiah, video pembelajaran, riset, portfolio, dan bimbingan mahasiswa.',
+                'Website akademik Arvita Agus Kurniasari untuk mengakses materi kuliah, publikasi ilmiah, video pembelajaran, riset, portfolio, dan bimbingan mahasiswa.',
 
-            'badge' => 'Human Academic',
-            'title' => 'Belajar, membaca, dan menonton dengan nyaman.',
+            'badge' => 'Academic Learning Hub',
+            'title' => 'Belajar informatika dengan alur yang lebih jelas.',
             'subtitle' =>
-                'Website akademik Arvita Agus Kurniasari dirancang sebagai ruang belajar yang hangat: mahasiswa mudah menemukan materi, pembaca mudah memahami publikasi, dan pengunjung bisa menonton video pembelajaran tanpa distraksi.',
+                'arvitaagusk.com menjadi ruang akademik Arvita Agus Kurniasari untuk menemukan materi kuliah, publikasi, video pembelajaran, riset, dan bimbingan mahasiswa dalam satu tempat yang rapi dan mudah diakses.',
             'ctaPrimary' => 'Mulai belajar',
-            'ctaSecondary' => 'Baca jurnal',
+            'ctaSecondary' => 'Lihat publikasi',
             'modeText' =>
-                'Pengunjung bisa memilih jalur: belajar materi, membaca jurnal, melihat profil akademik, atau menonton video.',
-            'quickAccess' => 'Quick access',
-            'learningNote' => 'Buat website terasa seperti meja kerja dosen: terarah, rapi, dan manusiawi.',
+                'Pilih bagian yang ingin kamu jelajahi: materi kuliah, publikasi ilmiah, video pembelajaran, atau profil akademik.',
+            'quickAccess' => 'Akses cepat',
+            'learningNote' =>
+                'Website ini membantu mahasiswa dan pembaca menemukan materi, publikasi, video, serta informasi akademik Arvita dengan lebih mudah.',
 
-            'learn' => 'Belajar',
-            'journal' => 'Jurnal',
+            'learn' => 'Materi',
+            'journal' => 'Publikasi',
             'video' => 'Video',
 
-            'learnEyebrow' => 'Ruang belajar',
-            'learnTitle' => 'Materi kuliah dibuat runtut dan tidak melelahkan.',
+            'learnEyebrow' => 'Materi Kuliah',
+            'learnTitle' => 'Materi disusun agar lebih mudah dipahami.',
             'learnDesc' =>
-                'Halaman materi punya alur: ringkasan, tujuan pembelajaran, materi utama, contoh kode, latihan, dan navigasi minggu berikutnya.',
-            'openMaterial' => 'Lihat materi',
+                'Setiap materi diarahkan agar mahasiswa dapat mengikuti pembelajaran dari konsep dasar, contoh, latihan, hingga penerapan dalam proyek sederhana.',
+            'openMaterial' => 'Buka materi',
 
-            'journalEyebrow' => 'Perpustakaan jurnal',
-            'journalTitle' => 'Publikasi tetap lengkap, tapi lebih enak dibaca.',
+            'journalEyebrow' => 'Publikasi & Riset',
+            'journalTitle' => 'Publikasi dibuat lebih mudah ditemukan.',
             'journalDesc' =>
-                'Bagian jurnal tidak hanya menampilkan data publikasi, tapi juga akses ke SINTA, Google Scholar, Scopus, dan konten bimbingan.',
-            'journalNote' => 'Preview abstract, citation, keywords, DOI, dan tautan profil akademik tetap tersedia.',
-            'oldContentTitle' => 'Konten lama tetap hidup.',
+                'Bagian publikasi menghubungkan karya ilmiah dengan bidang riset, tahun terbit, SINTA, Google Scholar, Scopus, dan topik akademik terkait.',
+            'journalNote' =>
+                'Publikasi dapat dilengkapi ringkasan, bidang riset, citation, DOI, dan tautan profil akademik.',
+            'oldContentTitle' => 'Konten lama tetap tersedia.',
             'oldContentDesc' =>
-                'Jurnal tidak berdiri sendiri. Bagian ini menghubungkan publikasi dengan profil eksternal dan bimbingan mahasiswa.',
+                'Konten dari website sebelumnya tetap dipertahankan, lalu ditata ulang agar lebih rapi, mudah dicari, dan nyaman dibaca.',
 
-            'videoEyebrow' => 'Ruang video',
-            'videoTitle' => 'Video pembelajaran terasa terkurasi.',
+            'videoEyebrow' => 'Video Pembelajaran',
+            'videoTitle' => 'Video membantu memahami materi dengan lebih praktis.',
             'videoDesc' =>
-                'Video disusun sebagai playlist belajar dengan ringkasan, durasi, topik, dan relasi ke materi kuliah.',
+                'Video pembelajaran dapat dikelompokkan berdasarkan mata kuliah, topik, dan durasi agar mahasiswa tahu harus mulai dari mana.',
             'featuredVideo' => 'Memahami Class dan Object',
 
-            'researchEyebrow' => 'Research focus',
-            'researchTitle' => 'Riset tetap terlihat, tapi tidak mendominasi.',
+            'researchEyebrow' => 'Fokus Akademik',
+            'researchTitle' => 'Bidang yang diajarkan, diteliti, dan dikembangkan.',
             'researchDesc' =>
-                'Area riset menjadi penghubung antara jurnal, course, video, portfolio, dan bimbingan mahasiswa.',
+                'Area akademik Arvita mencakup web development, OOP, IoT, image processing, augmented reality, dan educational technology yang terhubung dengan materi, publikasi, dan bimbingan.',
         ],
 
         'en' => [
-            'seoTitle' => 'Arvita Agus Kurniasari | Academic Learning Hub',
+            'seoTitle' => 'Arvita Agus Kurniasari | Informatics Materials, Publications, and Academic Work',
             'seoDescription' =>
-                'Academic website of Arvita Agus Kurniasari containing course materials, scientific publications, learning videos, research, portfolio, and student supervision.',
+                'Academic website of Arvita Agus Kurniasari for course materials, scientific publications, learning videos, research, portfolio, and student supervision.',
 
-            'badge' => 'Human Academic',
-            'title' => 'Learn, read, and watch comfortably.',
+            'badge' => 'Academic Learning Hub',
+            'title' => 'Learn informatics through a clearer path.',
             'subtitle' =>
-                'Arvita Agus Kurniasari’s academic website is designed as a warm learning hub: students can find course materials, readers can understand publications, and visitors can watch learning videos without distraction.',
+                'arvitaagusk.com is Arvita Agus Kurniasari’s academic space for accessing course materials, publications, learning videos, research, and student supervision in one organized place.',
             'ctaPrimary' => 'Start learning',
-            'ctaSecondary' => 'Read journals',
+            'ctaSecondary' => 'View publications',
             'modeText' =>
-                'Visitors can choose their path: study materials, read publications, view academic profiles, or watch videos.',
+                'Choose what you want to explore: course materials, scientific publications, learning videos, or academic profiles.',
             'quickAccess' => 'Quick access',
-            'learningNote' => 'Make the website feel like a lecturer’s desk: structured, warm, organized, and human.',
+            'learningNote' =>
+                'This website helps students and readers find Arvita’s materials, publications, videos, and academic information more easily.',
 
-            'learn' => 'Learn',
-            'journal' => 'Journals',
+            'learn' => 'Materials',
+            'journal' => 'Publications',
             'video' => 'Videos',
 
-            'learnEyebrow' => 'Learning space',
-            'learnTitle' => 'Course materials should feel structured and readable.',
+            'learnEyebrow' => 'Course Materials',
+            'learnTitle' => 'Materials are organized for easier learning.',
             'learnDesc' =>
-                'Each material page should include a summary, learning outcomes, main content, code examples, exercises, and next-week navigation.',
+                'Each material is designed to help students move from basic concepts to examples, exercises, and simple project-based practice.',
             'openMaterial' => 'Open material',
 
-            'journalEyebrow' => 'Journal library',
-            'journalTitle' => 'Publications stay complete, but easier to read.',
+            'journalEyebrow' => 'Publications & Research',
+            'journalTitle' => 'Publications are easier to find and explore.',
             'journalDesc' =>
-                'The journal section keeps publication data while connecting readers to SINTA, Google Scholar, Scopus, and supervision content.',
-            'journalNote' => 'Abstract preview, citation, keywords, DOI, and academic profile links remain available.',
-            'oldContentTitle' => 'Existing content stays visible.',
-            'oldContentDesc' => 'Journals should connect to external academic profiles and supervised student work.',
+                'The publication section connects academic work with research areas, publication years, SINTA, Google Scholar, Scopus, and related academic topics.',
+            'journalNote' =>
+                'Each publication can include a summary, research field, citation, DOI, and academic profile links.',
+            'oldContentTitle' => 'Previous content remains available.',
+            'oldContentDesc' =>
+                'Content from the previous website is preserved and reorganized to make it cleaner, easier to search, and more comfortable to read.',
 
-            'videoEyebrow' => 'Video room',
-            'videoTitle' => 'Learning videos feel curated.',
+            'videoEyebrow' => 'Learning Videos',
+            'videoTitle' => 'Videos help explain materials more practically.',
             'videoDesc' =>
-                'Videos are organized as learning playlists with summaries, duration, topics, and related course materials.',
+                'Learning videos can be grouped by course, topic, and duration so students know where to begin.',
             'featuredVideo' => 'Understanding Class and Object',
 
-            'researchEyebrow' => 'Research focus',
-            'researchTitle' => 'Research stays visible, but does not dominate.',
-            'researchDesc' => 'Research areas connect journals, courses, videos, portfolio, and student supervision.',
+            'researchEyebrow' => 'Academic Focus',
+            'researchTitle' => 'Fields taught, researched, and developed.',
+            'researchDesc' =>
+                'Arvita’s academic areas include web development, OOP, IoT, image processing, augmented reality, and educational technology, connected with materials, publications, and supervision.',
         ],
     ];
 
@@ -104,7 +110,7 @@
         'scopus' => 'https://sinta.kemdiktisaintek.go.id/authors/scopusanalysis/6757351',
         'github' => 'https://github.com/Arvita',
         'youtube' => 'https://www.youtube.com/channel/UCU5lYacwXkUkYaX6AZ1WnGQ',
-        'jti' => 'https://jti.polije.ac.id/jtipolije/public/dosen',
+        'jti' => 'https://jti.polije.ac.id/jtipolije/public/dosen/32/arvita-agus-kurniasari-sstmtrkom',
         'email' => 'mailto:arvita@polije.com',
     ];
     $t = $copy[$locale];
@@ -113,25 +119,25 @@
         [
             'title_id' => 'Pemrograman Dasar',
             'title_en' => 'Programming Fundamentals',
-            'weeks' => '14 minggu',
-            'desc_id' => 'Form, validasi, debugging, file handling, mini project.',
-            'desc_en' => 'Forms, validation, debugging, file handling, and mini projects.',
+            'weeks' => $locale === 'en' ? '14 weeks' : '14 minggu',
+            'desc_id' => 'Mulai dari logika dasar, form, validasi, debugging, file handling, sampai mini project.',
+            'desc_en' => 'Start from basic logic, forms, validation, debugging, file handling, and mini projects.',
             'tag' => 'Beginner',
         ],
         [
             'title_id' => 'Object-Oriented Programming',
             'title_en' => 'Object-Oriented Programming',
-            'weeks' => '14 minggu',
-            'desc_id' => 'Class, object, namespace, exception, relasi objek, SOLID, UML, PHP.',
-            'desc_en' => 'Classes, objects, namespaces, exceptions, object relations, SOLID, UML, and PHP.',
+            'weeks' => $locale === 'en' ? 'Core course' : 'Mata kuliah inti',
+            'desc_id' => 'Belajar class, object, relasi objek, exception, UML, dan implementasi OOP di PHP.',
+            'desc_en' => 'Learn classes, objects, object relations, exceptions, UML, and OOP implementation in PHP.',
             'tag' => 'Core skill',
         ],
         [
             'title_id' => 'Microsoft Office',
             'title_en' => 'Microsoft Office',
-            'weeks' => 'Praktikum',
-            'desc_id' => 'Produktivitas akademik, laporan, presentasi, dan pengolahan data.',
-            'desc_en' => 'Academic productivity, reports, presentations, and data processing.',
+            'weeks' => $locale === 'en' ? 'Practical lab' : 'Praktikum',
+            'desc_id' => 'Materi produktivitas akademik untuk laporan, presentasi, data, dan pekerjaan kuliah.',
+            'desc_en' => 'Academic productivity materials for reports, presentations, data, and coursework.',
             'tag' => 'Practical',
         ],
     ];
@@ -204,23 +210,23 @@
     $researchAreas = [
         [
             'title' => 'Web Development',
-            'desc_id' => 'Learning platforms & academic systems.',
-            'desc_en' => 'Learning platforms and academic systems.',
+            'desc_id' => 'Pengembangan sistem informasi, website akademik, dan platform pembelajaran.',
+            'desc_en' => 'Information systems, academic websites, and learning platform development.',
         ],
         [
             'title' => 'Internet of Things',
-            'desc_id' => 'Applied devices and prototypes.',
-            'desc_en' => 'Applied devices and prototypes.',
+            'desc_id' => 'Prototype perangkat, sensor, dan sistem terapan untuk kebutuhan pembelajaran maupun riset.',
+            'desc_en' => 'Device prototypes, sensors, and applied systems for learning and research needs.',
         ],
         [
             'title' => 'Image Processing',
-            'desc_id' => 'Computer vision and visual data.',
-            'desc_en' => 'Computer vision and visual data.',
+            'desc_id' => 'Pengolahan citra, data visual, dan pendekatan computer vision.',
+            'desc_en' => 'Image processing, visual data, and computer vision approaches.',
         ],
         [
             'title' => 'Augmented Reality',
-            'desc_id' => 'Interactive learning experiences.',
-            'desc_en' => 'Interactive learning experiences.',
+            'desc_id' => 'Media pembelajaran interaktif yang menggabungkan objek digital dan pengalaman nyata.',
+            'desc_en' => 'Interactive learning media that combines digital objects with real-world experiences.',
         ],
     ];
 @endphp
