@@ -63,10 +63,11 @@
         'scopus' => 'https://sinta.kemdiktisaintek.go.id/authors/scopusanalysis/6757351',
         'github' => 'https://github.com/Arvita',
         'youtube' => 'https://www.youtube.com/channel/UCU5lYacwXkUkYaX6AZ1WnGQ',
-        'jti' => 'https://jti.polije.ac.id/jtipolije/public/dosen',
+        'instagram' => 'https://www.instagram.com/arvitaagusk/',
+        'jti' => 'https://jti.polije.ac.id/jtipolije/public/dosen/32/arvita-agus-kurniasari-sstmtrkom',
         'email' => 'mailto:arvita@polije.com',
-        'website' => 'https://arvitaagusk.com',
     ];
+
     $t = $labels[$locale];
 
     $navItems = [
@@ -289,116 +290,74 @@
             @yield('content')
         </main>
 
-        <footer class="px-3 pb-3 pt-10">
-            <div
-                class="mx-auto max-w-6xl overflow-hidden rounded-[2rem] border border-[#e3d8c8] bg-[#fffaf2]/80 shadow-[0_18px_70px_rgba(31,41,51,0.08)] backdrop-blur-xl dark:border-white/10 dark:bg-[#1f2722]/80 dark:shadow-[0_18px_70px_rgba(0,0,0,0.28)]">
-                <div class="grid gap-0 lg:grid-cols-[1.15fr_0.85fr_0.85fr]">
-                    <div class="relative border-b border-[#e3d8c8] p-7 dark:border-white/10 lg:border-b-0 lg:border-r">
-                        <div
-                            class="absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#d9a441]/20 blur-3xl dark:bg-[#d0a150]/20">
-                        </div>
+        <footer class="px-3 pb-4 pt-8">
+    <div class="mx-auto max-w-6xl">
+        <div class="rounded-[1.6rem] border border-[#e3d8c8]/80 bg-[#f7f2ea]/88 px-6 py-5 shadow-[0_18px_60px_rgba(31,41,51,0.08)] backdrop-blur-2xl transition-colors duration-300 dark:border-white/10 dark:bg-[#151b18]/88 dark:shadow-[0_18px_60px_rgba(0,0,0,0.28)]">
+            <div class="flex flex-col items-center justify-between gap-5 sm:flex-row">
+                <div class="flex items-center gap-3">
+                    <a
+                        href="{{ $externalLinks['github'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex h-11 w-11 items-center justify-center rounded-full bg-[#4f6f52] text-white shadow-sm ring-1 ring-[#3e5d42]/15 transition hover:-translate-y-0.5 hover:bg-[#405d43] dark:bg-[#ff4b78] dark:ring-white/10 dark:hover:bg-[#ff5f88]"
+                        aria-label="GitHub"
+                        title="GitHub"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M12 .5A12 12 0 0 0 8.2 23.9c.6.1.8-.2.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.5-1.3-1.2-1.6-1.2-1.6-1-.7.1-.7.1-.7 1.1.1 1.7 1.2 1.7 1.2 1 .1.7 2.1 3.4 1.5.1-.7.4-1.2.7-1.5-2.6-.3-5.4-1.3-5.4-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.6.1-3.2 0 0 1-.3 3.3 1.2a11.3 11.3 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.6.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .4.2.7.8.6A12 12 0 0 0 12 .5Z"/>
+                        </svg>
+                    </a>
 
-                        <div class="relative">
-                            <div class="flex items-center gap-3">
-                                <div
-                                    class="flex h-12 w-12 items-center justify-center rounded-full border border-[#e3d8c8] bg-[#f7f2ea] text-sm font-black text-[#4f6f52] dark:border-white/10 dark:bg-[#151b18] dark:text-[#c7d7a9]">
-                                    AA
-                                </div>
+                    <a
+                        href="{{ $externalLinks['instagram'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex h-11 w-11 items-center justify-center rounded-full bg-[#4f6f52] text-white shadow-sm ring-1 ring-[#3e5d42]/15 transition hover:-translate-y-0.5 hover:bg-[#405d43] dark:bg-[#ff4b78] dark:ring-white/10 dark:hover:bg-[#ff5f88]"
+                        aria-label="Instagram"
+                        title="Instagram"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+                            <circle cx="12" cy="12" r="4"></circle>
+                            <path d="M17.5 6.5h.01"></path>
+                        </svg>
+                    </a>
 
-                                <div>
-                                    <p class="text-lg font-black leading-tight">
-                                        Arvita Agus Kurniasari
-                                    </p>
-                                    <p
-                                        class="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-[#4f6f52] dark:text-[#c7d7a9]">
-                                        Academic Learning Hub
-                                    </p>
-                                </div>
-                            </div>
+                    <a
+                        href="{{ $externalLinks['youtube'] }}"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="flex h-11 w-11 items-center justify-center rounded-full bg-[#4f6f52] text-white shadow-sm ring-1 ring-[#3e5d42]/15 transition hover:-translate-y-0.5 hover:bg-[#405d43] dark:bg-[#ff4b78] dark:ring-white/10 dark:hover:bg-[#ff5f88]"
+                        aria-label="YouTube"
+                        title="YouTube"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                            <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.5v-7l6.3 3.5-6.3 3.5Z"/>
+                        </svg>
+                    </a>
 
-                            <p class="mt-5 max-w-md text-sm leading-7 text-[#6b6258] dark:text-[#bdb4a7]">
-                                {{ $t['footerDescription'] }}
-                            </p>
-
-                            <div class="mt-6 flex flex-wrap gap-2">
-                                <a href="#"
-                                    class="rounded-full border border-[#e3d8c8] bg-white/35 px-3 py-1.5 text-xs font-black text-[#6b6258] transition hover:-translate-y-0.5 hover:text-[#4f6f52] dark:border-white/10 dark:bg-white/5 dark:text-[#bdb4a7] dark:hover:text-[#c7d7a9]">
-                                    SINTA
-                                </a>
-                                <a href="#"
-                                    class="rounded-full border border-[#e3d8c8] bg-white/35 px-3 py-1.5 text-xs font-black text-[#6b6258] transition hover:-translate-y-0.5 hover:text-[#4f6f52] dark:border-white/10 dark:bg-white/5 dark:text-[#bdb4a7] dark:hover:text-[#c7d7a9]">
-                                    Scholar
-                                </a>
-                                <a href="#"
-                                    class="rounded-full border border-[#e3d8c8] bg-white/35 px-3 py-1.5 text-xs font-black text-[#6b6258] transition hover:-translate-y-0.5 hover:text-[#4f6f52] dark:border-white/10 dark:bg-white/5 dark:text-[#bdb4a7] dark:hover:text-[#c7d7a9]">
-                                    Scopus
-                                </a>
-                                <a href="{{ route('supervisions.index') }}"
-                                    class="rounded-full border border-[#e3d8c8] bg-white/35 px-3 py-1.5 text-xs font-black text-[#6b6258] transition hover:-translate-y-0.5 hover:text-[#4f6f52] dark:border-white/10 dark:bg-white/5 dark:text-[#bdb4a7] dark:hover:text-[#c7d7a9]">
-                                    {{ $t['supervision'] }}
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="border-b border-[#e3d8c8] p-7 dark:border-white/10 lg:border-b-0 lg:border-r">
-                        <p class="text-xs font-black uppercase tracking-[0.22em] text-[#4f6f52] dark:text-[#c7d7a9]">
-                            {{ $t['academicLinks'] }}
-                        </p>
-
-                        <div class="mt-5 grid gap-2 text-sm font-bold text-[#6b6258] dark:text-[#bdb4a7]">
-                            <a href="#"
-                                class="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-[#eaf0e6] hover:text-[#3e5d42] dark:hover:bg-[#314033] dark:hover:text-[#dce8cc]">
-                                <span>SINTA</span>
-                                <span class="transition group-hover:translate-x-1">→</span>
-                            </a>
-                            <a href="#"
-                                class="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-[#eaf0e6] hover:text-[#3e5d42] dark:hover:bg-[#314033] dark:hover:text-[#dce8cc]">
-                                <span>Google Scholar</span>
-                                <span class="transition group-hover:translate-x-1">→</span>
-                            </a>
-                            <a href="#"
-                                class="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-[#eaf0e6] hover:text-[#3e5d42] dark:hover:bg-[#314033] dark:hover:text-[#dce8cc]">
-                                <span>Scopus</span>
-                                <span class="transition group-hover:translate-x-1">→</span>
-                            </a>
-                            <a href="#"
-                                class="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-[#eaf0e6] hover:text-[#3e5d42] dark:hover:bg-[#314033] dark:hover:text-[#dce8cc]">
-                                <span>GitHub</span>
-                                <span class="transition group-hover:translate-x-1">→</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="p-7">
-                        <p class="text-xs font-black uppercase tracking-[0.22em] text-[#4f6f52] dark:text-[#c7d7a9]">
-                            {{ $t['content'] }}
-                        </p>
-
-                        <div class="mt-5 grid gap-2 text-sm font-bold text-[#6b6258] dark:text-[#bdb4a7]">
-                            @foreach ($navItems as $item)
-                                <a href="{{ route($item['route']) }}"
-                                    class="group flex items-center justify-between rounded-2xl px-4 py-3 transition hover:bg-[#eaf0e6] hover:text-[#3e5d42] dark:hover:bg-[#314033] dark:hover:text-[#dce8cc]">
-                                    <span>{{ $item['label'] }}</span>
-                                    <span class="transition group-hover:translate-x-1">→</span>
-                                </a>
-                            @endforeach
-                        </div>
-                    </div>
+                    <a
+                        href="{{ $externalLinks['email'] }}"
+                        class="flex h-11 w-11 items-center justify-center rounded-full bg-[#4f6f52] text-white shadow-sm ring-1 ring-[#3e5d42]/15 transition hover:-translate-y-0.5 hover:bg-[#405d43] dark:bg-[#ff4b78] dark:ring-white/10 dark:hover:bg-[#ff5f88]"
+                        aria-label="Email"
+                        title="Email"
+                    >
+                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M4 4h16a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/>
+                            <path d="m22 6-10 7L2 6"/>
+                        </svg>
+                    </a>
                 </div>
 
-                <div
-                    class="flex flex-col gap-3 border-t border-[#e3d8c8] bg-[#f7f2ea]/60 px-7 py-5 text-xs font-semibold text-[#6b6258] dark:border-white/10 dark:bg-[#151b18]/50 dark:text-[#bdb4a7] sm:flex-row sm:items-center sm:justify-between">
-                    <p>
-                        © {{ date('Y') }} Arvita Agus Kurniasari. All rights reserved.
-                    </p>
-
-                    <p class="text-[#4f6f52] dark:text-[#c7d7a9]">
-                        {{ $t['designedAs'] }}
-                    </p>
-                </div>
+                <p class="text-center text-sm font-semibold tracking-wide text-[#4b5563] transition-colors duration-300 dark:text-[#e8ded0]/80 sm:text-right">
+                    Copyright ©{{ date('Y') }} By
+                    <span class="mx-1 text-[#4f6f52] dark:text-[#ff4b78]">♥</span>
+                    <span class="font-black text-[#111827] dark:text-[#f5efe6]">ApikaCoding</span>
+                </p>
             </div>
-        </footer>
+        </div>
+    </div>
+</footer>
     </div>
 
     @stack('scripts')
