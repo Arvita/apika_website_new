@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Http\Request;
 Route::get('/', function () {
     return view('frontend.pages.home');
 })->name('home');
@@ -14,6 +14,15 @@ Route::view('/videos', 'frontend.pages.videos')->name('videos.index');
 Route::view('/portfolio', 'frontend.pages.portfolio')->name('portfolio.index');
 Route::view('/supervisions', 'frontend.pages.supervisions')->name('supervisions.index');
 Route::view('/contact', 'frontend.pages.contact')->name('contact');
+Route::get('/language/{locale}', function (Request $request, string $locale) {
+    if (! in_array($locale, ['id', 'en'])) {
+        abort(404);
+    }
+
+    session(['locale' => $locale]);
+
+    return back();
+})->name('language.switch');
 
 Route::middleware(['auth'])->prefix('admin')->name('admin.')->group(function () {
     Route::view('/', 'admin.dashboard')->name('dashboard');
