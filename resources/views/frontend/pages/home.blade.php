@@ -258,7 +258,7 @@
                         <span>→</span>
                     </a>
 
-                    <a href="{{ route('publications.index') }}"
+                    <a href="{{ route('research') }}"
                         class="inline-flex items-center gap-2 rounded-full border border-[#e3d8c8] bg-[#fffaf2] px-5 py-3 text-sm font-black transition hover:-translate-y-0.5 dark:border-white/10 dark:bg-[#1f2722]">
                         {{ $t['ctaSecondary'] }}
                     </a>

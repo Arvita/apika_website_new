@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\PublicationController;
+use App\Models\Publication;
 
 Route::get('/', function () {
     return view('frontend.pages.home');
@@ -10,7 +12,15 @@ Route::get('/', function () {
 Route::view('/about', 'frontend.pages.about')->name('about');
 Route::view('/research', 'frontend.pages.research')->name('research');
 Route::view('/courses', 'frontend.pages.courses')->name('courses.index');
-Route::view('/publications', 'frontend.pages.publications')->name('publications.index');
+Route::get('/publications', function () {
+    $publications = Publication::published()
+        ->orderByDesc('year')
+        ->orderBy('sort_order')
+        ->latest()
+        ->paginate(9);
+
+    return view('frontend.pages.publications.index', compact('publications'));
+})->name('publications.index');
 Route::view('/videos', 'frontend.pages.videos')->name('videos.index');
 Route::view('/portfolio', 'frontend.pages.portfolio')->name('portfolio.index');
 Route::view('/supervisions', 'frontend.pages.supervisions')->name('supervisions.index');
@@ -39,9 +49,18 @@ Route::middleware(['auth'])
     ->name('admin.')
     ->group(function () {
         Route::get('/', function () {
-            return view('admin.dashboard');
+            $publicationCount = Publication::count();
+
+            return view('admin.dashboard', compact('publicationCount'));
         })->name('dashboard');
+        Route::get('publications/import', [PublicationController::class, 'importForm'])
+            ->name('publications.import');
+
+        Route::post('publications/import', [PublicationController::class, 'importBibtex'])
+            ->name('publications.import.store');
+        Route::resource('publications', PublicationController::class)->except(['show']);
     });
 
 
-require __DIR__.'/auth.php';
+
+require __DIR__ . '/auth.php';

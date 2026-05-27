@@ -502,121 +502,13 @@
                 flex-direction: column;
             }
         }
-
-        .dash-title {
-            font-size: clamp(28px, 3vw, 36px);
-        }
-
-        .notice-panel {
-            margin-top: 22px;
-            padding: 18px 22px;
-        }
-
-        .notice-icon {
-            width: 48px;
-            height: 48px;
-        }
-
-        .notice-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .stats-grid {
-            gap: 16px;
-        }
-
-        .stat-card {
-            padding: 18px;
-        }
-
-        .stat-content {
-            gap: 16px;
-        }
-
-        .stat-icon {
-            width: 54px;
-            height: 54px;
-        }
-
-        .stat-icon svg {
-            width: 26px;
-            height: 26px;
-        }
-
-        .stat-label {
-            font-size: 14px;
-        }
-
-        .stat-value {
-            font-size: 32px;
-        }
-
-        .stat-desc {
-            font-size: 13px;
-        }
-
-        .middle-grid {
-            gap: 16px;
-        }
-
-        .block-panel {
-            padding: 18px 20px;
-        }
-
-        .block-title {
-            font-size: 21px;
-        }
-
-        .quick-grid {
-            gap: 14px;
-        }
-
-        .quick-card {
-            min-height: 145px;
-            padding: 16px 12px;
-        }
-
-        .quick-card .stat-icon {
-            width: 48px;
-            height: 48px;
-        }
-
-        .quick-card .stat-icon svg {
-            width: 24px;
-            height: 24px;
-        }
-
-        .quick-title {
-            font-size: 13px;
-        }
-
-        .quick-desc {
-            font-size: 12px;
-        }
-
-        .recent-head {
-            padding: 15px 20px;
-        }
-
-        .recent-title {
-            font-size: 20px;
-        }
-
-        .admin-table th {
-            padding: 12px 20px;
-        }
-
-        .empty-state {
-            padding: 34px 20px;
-        }
     </style>
 
     @php
         $stats = [
             [
                 'label' => 'Publications',
-                'value' => '0',
+                'value' => $publicationCount ?? 0,
                 'desc' => 'Total publications',
                 'icon' => 'book',
                 'tone' => 'green',
@@ -631,7 +523,6 @@
                 'tone' => 'gold',
             ],
         ];
-
         $managementItems = [
             [
                 'title' => 'Publications',
