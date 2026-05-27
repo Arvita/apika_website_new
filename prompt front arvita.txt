@@ -1,0 +1,139 @@
+Saya sedang membangun ulang website arvitaagusk.com dengan repo Laravel baru:
+
+Repo:
+https://github.com/Arvita/apika_website_new/
+
+Branch aktif:
+feature/human-academic-rebuild
+
+Konteks project:
+- Website personal akademik Arvita Agus Kurniasari.
+- Stack: Laravel Blade + Tailwind + Vite + Alpine.js.
+- Tema yang dipilih: Human Academic.
+- Style yang diinginkan: clean, akademik, nyaman dibaca, tidak terlalu ceria, tidak terlalu resmi, tidak terlihat AI/template.
+- Website harus mendukung bilingual Indonesia/English.
+- Website harus mendukung dark/light mode.
+- Responsive untuk frontend dan nantinya admin/backend.
+- Konten lama arvitaagusk.com tetap tidak boleh hilang secara konsep: publikasi, SINTA, Google Scholar, Scopus, video, bimbinganku, materi, portfolio, JTI, GitHub, YouTube, Instagram, email.
+
+Status frontend:
+- Home sudah dibuat dan dipoles beberapa kali.
+- User akhirnya bilang desain sudah final/abaikan bagian visual yang masih kurang, jangan dirombak besar lagi.
+- Jangan ubah full desain home lagi kecuali diminta.
+- Yang penting sekarang lanjut ke backend/admin.
+- Footer sudah diperbaiki agar light/dark mengikuti tema, tidak pakai pink di dark mode. Dark mode footer harus pakai putih/ivory/sage, bukan pink.
+- Header/navbar sudah pakai konsep floating/glass.
+- Logo AAK sudah dipilih ke arah IT/informatics, bukan daun.
+- Favicon/logo harus ditempatkan di:
+  public/assets/brand/logo-aak-light.png
+  public/assets/brand/logo-aak-dark.png
+  public/assets/brand/favicon-aak.png
+  public/assets/brand/favicon.ico
+- Jangan taruh asset manual di public/build karena akan hilang saat npm run build.
+
+File penting:
+- resources/views/frontend/layouts/app.blade.php
+- resources/views/frontend/pages/home.blade.php
+- routes/web.php
+- public/assets/brand/
+
+Catatan teknis:
+- Kalau perubahan tidak muncul, jalankan:
+  php artisan view:clear
+  php artisan optimize:clear
+  npm run build
+  lalu Ctrl + F5.
+- Kalau favicon/logo tidak muncul, cek langsung:
+  http://localhost:8000/assets/brand/favicon-aak.png
+  http://localhost:8000/assets/brand/logo-aak-light.png
+  http://localhost:8000/assets/brand/logo-aak-dark.png
+- Pastikan tidak mengedit file di branch yang salah.
+- Cek branch:
+  git branch --show-current
+- Kalau perlu:
+  git checkout feature/human-academic-rebuild
+  git pull origin feature/human-academic-rebuild
+
+Link akademik yang digunakan:
+- Website: https://arvitaagusk.com
+- SINTA: https://sinta.kemdiktisaintek.go.id/authors/profile/6757351
+- Google Scholar: https://scholar.google.com/citations?hl=en&user=Yn7_99QAAAAJ
+- Scopus: https://sinta.kemdiktisaintek.go.id/authors/scopusanalysis/6757351
+- GitHub: https://github.com/Arvita
+- YouTube: https://www.youtube.com/channel/UCU5lYacwXkUkYaX6AZ1WnGQ
+- Instagram sementara: https://www.instagram.com/arvita.sp__/
+- JTI Polije: https://jti.polije.ac.id/jtipolije/public/dosen
+- Email: mailto:arvita@polije.com
+
+Keputusan desain/copy:
+- Jangan pakai copy yang terlalu kaku seperti “Learn, read, and watch comfortably.”
+- Hero copy yang lebih aman:
+  ID: “Belajar informatika dengan alur yang lebih jelas.”
+  EN: “Learn informatics through a clearer path.”
+- Tone copy: sederhana, akademik, manusiawi, tidak seperti brosur kampus.
+- User tidak suka layout yang berantakan atau terlalu banyak eksperimen visual.
+- Kalau memperbaiki desain, lakukan perubahan kecil per bagian, jangan full replace besar-besaran.
+
+Riwayat SEO:
+- Domain utama diarahkan ke https://arvitaagusk.com
+- Sudah dibahas canonical tag:
+  <link rel="canonical" href="https://arvitaagusk.com/" />
+- Laravel .env APP_URL harus disesuaikan:
+  APP_URL=https://arvitaagusk.com
+- Untuk Laravel, canonical bisa ditaruh di layout Blade utama, bukan harus di setiap Blade manual.
+
+Next step yang diinginkan sekarang:
+Lanjut ke backend atau admin site.
+
+Rekomendasi urutan:
+1. Backend data structure
+2. Model + migration
+3. Seeder data awal
+4. Admin CRUD sederhana
+5. Upload image/file
+6. Frontend ambil data dari database
+7. Baru polish admin UI
+
+Prioritas modul backend:
+1. Publications
+2. Courses
+3. Videos
+4. Supervisions
+5. Research Areas
+6. Portfolio
+7. Academic Links
+8. Site Settings
+
+Mulai dari Publications karena paling penting untuk SEO akademik dan bisa terhubung ke:
+- judul
+- abstrak/ringkasan
+- tahun
+- bidang riset
+- DOI
+- citation
+- link jurnal
+- SINTA
+- Scholar
+- Scopus
+- file PDF jika ada
+- status publish/draft
+- bilingual title/abstract jika perlu
+
+Admin sidebar yang diinginkan:
+Dashboard
+Courses
+Publications
+Videos
+Research Areas
+Supervisions
+Portfolio
+Academic Links
+Site Settings
+
+Preferensi admin:
+- Mulai dengan Blade admin sederhana dulu.
+- Jangan langsung pakai Filament kecuali diminta.
+- Admin harus responsive.
+- Backend jangan dibuat berantakan; mulai dari database yang rapi.
+
+Tolong lanjutkan dari konteks ini. Jangan ulang dari awal. Step berikutnya: bantu buat backend/admin mulai dari modul Publications dengan migration, model, controller, routes, Blade admin index/create/edit, validasi, dan integrasi sederhana ke frontend publications.index.
