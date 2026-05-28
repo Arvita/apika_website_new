@@ -70,6 +70,8 @@ Route::middleware(['auth'])
             ->name('publications.import.store');
         Route::resource('publications', PublicationController::class)->except(['show']);
         Route::resource('videos', VideoController::class)->except(['show']);
+        Route::post('videos/sync-youtube', [VideoController::class, 'syncYoutube'])
+            ->name('videos.sync-youtube');
     });
 
 

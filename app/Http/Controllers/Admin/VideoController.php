@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use App\Services\YouTube\YouTubeRssSyncService;
+use Illuminate\Http\RedirectResponse;
 
 class VideoController extends Controller
 {
@@ -120,5 +122,25 @@ class VideoController extends Controller
             'year' => ['nullable', 'integer', 'min:1900', 'max:' . now()->year],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);
+    }
+
+    public function syncYoutube(YouTubeRssSyncService $service): RedirectResponse
+    {
+        try {
+            $result = $service->sync();
+
+            return redirect()
+                ->route('admin.videos.index')
+                ->with(
+                    'success',
+                    "Sync YouTube selesai. Baru: {$result['created']}, diperbarui: {$result['updated']}."
+                );
+        } catch (\Throwable $e) {
+            return redirect()
+                ->route('admin.videos.index')
+                ->withErrors([
+                    'youtube_sync' => 'Sync YouTube gagal: ' . $e->getMessage(),
+                ]);
+        }
     }
 }

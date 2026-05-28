@@ -20,6 +20,10 @@ return [
         'endpoint' => env('MAILGUN_ENDPOINT', 'api.mailgun.net'),
         'scheme' => 'https',
     ],
+    'youtube' => [
+        'key' => env('YOUTUBE_API_KEY'),
+        'channel_id' => env('YOUTUBE_CHANNEL_ID', 'UCU5lYacwXkUkYaX6AZ1WnGQ'),
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
