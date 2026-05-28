@@ -6,6 +6,12 @@ use App\Http\Controllers\Admin\PublicationController;
 use App\Models\Publication;
 use App\Http\Controllers\Admin\VideoController;
 use App\Models\Video;
+use App\Models\Course;
+use App\Models\CourseMaterial;
+use App\Models\CourseMaterialSection;
+use App\Http\Controllers\Admin\CourseController;
+use App\Http\Controllers\Admin\CourseMaterialController;
+use App\Http\Controllers\Admin\CourseMaterialSectionController;
 
 Route::get('/', function () {
     return view('frontend.pages.home');
@@ -13,7 +19,50 @@ Route::get('/', function () {
 
 Route::view('/about', 'frontend.pages.about')->name('about');
 Route::view('/research', 'frontend.pages.research')->name('research');
-Route::view('/courses', 'frontend.pages.courses')->name('courses.index');
+Route::get('/courses', function () {
+    $courses = Course::published()
+        ->withCount(['publishedMaterials as materials_count'])
+        ->orderByDesc('is_featured')
+        ->orderBy('sort_order')
+        ->latest()
+        ->paginate(9);
+
+    return view('frontend.pages.courses.index', compact('courses'));
+})->name('courses.index');
+
+Route::get('/courses/{course:slug}', function (Course $course) {
+    abort_unless($course->is_published, 404);
+
+    $course->load(['publishedMaterials']);
+
+    return view('frontend.pages.courses.show', compact('course'));
+})->name('courses.show');
+
+Route::get('/courses/{course:slug}/{material:slug}', function (Course $course, CourseMaterial $material) {
+    abort_unless($course->is_published, 404);
+    abort_unless($material->course_id === $course->id && $material->is_published, 404);
+
+    $material->load(['course', 'publishedSections']);
+
+    $previousMaterial = CourseMaterial::published()
+        ->where('course_id', $course->id)
+        ->where('sort_order', '<', $material->sort_order)
+        ->orderByDesc('sort_order')
+        ->first();
+
+    $nextMaterial = CourseMaterial::published()
+        ->where('course_id', $course->id)
+        ->where('sort_order', '>', $material->sort_order)
+        ->orderBy('sort_order')
+        ->first();
+
+    return view('frontend.pages.courses.material', compact(
+        'course',
+        'material',
+        'previousMaterial',
+        'nextMaterial'
+    ));
+})->name('materials.show');
 Route::get('/publications', function () {
     $publications = Publication::published()
         ->orderByDesc('year')
@@ -72,6 +121,9 @@ Route::middleware(['auth'])
         Route::resource('videos', VideoController::class)->except(['show']);
         Route::post('videos/sync-youtube', [VideoController::class, 'syncYoutube'])
             ->name('videos.sync-youtube');
+        Route::resource('courses', CourseController::class)->except(['show']);
+        Route::resource('materials', CourseMaterialController::class)->except(['show']);
+        Route::resource('material-sections', CourseMaterialSectionController::class)->except(['show']);
     });
 
 

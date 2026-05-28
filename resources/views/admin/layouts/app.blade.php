@@ -714,23 +714,54 @@
 <body class="aak-admin-body">
     @php
         $navItems = [
-            ['label' => 'Dashboard', 'route' => 'admin.dashboard', 'match' => 'admin.dashboard', 'icon' => 'dashboard'],
+            [
+                'label' => 'Dashboard',
+                'route' => 'admin.dashboard',
+                'match' => 'admin.dashboard',
+                'icon' => 'dashboard',
+            ],
             [
                 'label' => 'Publications',
                 'route' => 'admin.publications.index',
                 'match' => 'admin.publications.*',
                 'icon' => 'book',
             ],
-            ['label' => 'Courses', 'route' => 'admin.courses.index', 'match' => 'admin.courses.*', 'icon' => 'cap'],
-            ['label' => 'Videos', 'route' => 'admin.videos.index', 'match' => 'admin.videos.*', 'icon' => 'video'],
+            [
+                'label' => 'Courses',
+                'route' => 'admin.courses.index',
+                'match' => 'admin.courses.*',
+                'icon' => 'cap',
+            ],
+            [
+                'label' => 'Materials',
+                'route' => 'admin.materials.index',
+                'match' => ['admin.materials.*', 'admin.material-sections.*'],
+                'icon' => 'page',
+            ],
+            [
+                'label' => 'Videos',
+                'route' => 'admin.videos.index',
+                'match' => 'admin.videos.*',
+                'icon' => 'video',
+            ],
             [
                 'label' => 'Portfolio',
                 'route' => 'admin.portfolio.index',
                 'match' => 'admin.portfolio.*',
                 'icon' => 'briefcase',
             ],
-            ['label' => 'Media Library', 'route' => 'admin.media.index', 'match' => 'admin.media.*', 'icon' => 'image'],
-            ['label' => 'Pages', 'route' => 'admin.pages.index', 'match' => 'admin.pages.*', 'icon' => 'page'],
+            [
+                'label' => 'Media Library',
+                'route' => 'admin.media.index',
+                'match' => 'admin.media.*',
+                'icon' => 'image',
+            ],
+            [
+                'label' => 'Pages',
+                'route' => 'admin.pages.index',
+                'match' => 'admin.pages.*',
+                'icon' => 'page',
+            ],
             [
                 'label' => 'Comments',
                 'route' => 'admin.comments.index',
@@ -743,7 +774,12 @@
                 'match' => 'admin.settings.*',
                 'icon' => 'settings',
             ],
-            ['label' => 'Profile', 'route' => 'admin.profile.edit', 'match' => 'admin.profile.*', 'icon' => 'user'],
+            [
+                'label' => 'Profile',
+                'route' => 'admin.profile.edit',
+                'match' => 'admin.profile.*',
+                'icon' => 'user',
+            ],
         ];
     @endphp
 
@@ -773,10 +809,12 @@
                     @php
                         $exists = Route::has($item['route']);
                         $href = $exists ? route($item['route']) : '#';
-                        $active = request()->routeIs($item['match']);
+                        $active = is_array($item['match'])
+                            ? request()->routeIs(...$item['match'])
+                            : request()->routeIs($item['match']);
                     @endphp
 
-                    @if ($index === 5)
+                    @if ($index === 6)
                         <div class="sidebar-divider"></div>
                     @endif
 
