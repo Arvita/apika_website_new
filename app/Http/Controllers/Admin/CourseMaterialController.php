@@ -91,15 +91,14 @@ class CourseMaterialController extends Controller
             ->with('success', 'Materi berhasil diperbarui.');
     }
 
-    public function destroy(CourseMaterialSection $material_section)
+    public function destroy(CourseMaterial $material)
     {
-        $materialId = $material_section->course_material_id;
-
-        $material_section->delete();
+        $material->sections()->delete();
+        $material->delete();
 
         return redirect()
-            ->route('admin.materials.edit', $materialId)
-            ->with('success', 'Sub materi berhasil dihapus.');
+            ->route('admin.materials.index')
+            ->with('success', 'Materi berhasil dihapus.');
     }
     private function validatedData(Request $request): array
     {

@@ -13,7 +13,10 @@ class CourseMaterialSectionController extends Controller
     {
         return view('admin.material-sections.create', [
             'section' => new CourseMaterialSection(),
-            'materials' => CourseMaterial::with('course')->orderBy('course_id')->orderBy('sort_order')->get(),
+            'materials' => CourseMaterial::with('course')
+                ->orderBy('course_id')
+                ->orderBy('sort_order')
+                ->get(),
             'selectedMaterialId' => $request->material_id,
         ]);
     }
@@ -34,7 +37,10 @@ class CourseMaterialSectionController extends Controller
     {
         return view('admin.material-sections.edit', [
             'section' => $material_section,
-            'materials' => CourseMaterial::with('course')->orderBy('course_id')->orderBy('sort_order')->get(),
+            'materials' => CourseMaterial::with('course')
+                ->orderBy('course_id')
+                ->orderBy('sort_order')
+                ->get(),
             'selectedMaterialId' => $material_section->course_material_id,
         ]);
     }
@@ -51,16 +57,16 @@ class CourseMaterialSectionController extends Controller
             ->with('success', 'Sub materi berhasil diperbarui.');
     }
 
-   public function destroy(CourseMaterialSection $material_section)
-{
-    $materialId = $material_section->course_material_id;
+    public function destroy(CourseMaterialSection $material_section)
+    {
+        $materialId = $material_section->course_material_id;
 
-    $material_section->delete();
+        $material_section->delete();
 
-    return redirect()
-        ->route('admin.materials.edit', $materialId)
-        ->with('success', 'Sub materi berhasil dihapus.');
-}
+        return redirect()
+            ->route('admin.materials.edit', $materialId)
+            ->with('success', 'Sub materi berhasil dihapus.');
+    }
 
     private function validatedData(Request $request): array
     {
