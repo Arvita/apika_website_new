@@ -4,6 +4,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\PublicationController;
 use App\Models\Publication;
+use App\Http\Controllers\Admin\VideoController;
+use App\Models\Video;
 
 Route::get('/', function () {
     return view('frontend.pages.home');
@@ -21,7 +23,15 @@ Route::get('/publications', function () {
 
     return view('frontend.pages.publications.index', compact('publications'));
 })->name('publications.index');
-Route::view('/videos', 'frontend.pages.videos')->name('videos.index');
+Route::get('/videos', function () {
+    $videos = Video::published()
+        ->orderByDesc('is_featured')
+        ->orderBy('sort_order')
+        ->latest()
+        ->paginate(9);
+
+    return view('frontend.pages.videos', compact('videos'));
+})->name('videos.index');
 Route::view('/portfolio', 'frontend.pages.portfolio')->name('portfolio.index');
 Route::view('/supervisions', 'frontend.pages.supervisions')->name('supervisions.index');
 Route::view('/contact', 'frontend.pages.contact')->name('contact');
@@ -59,6 +69,7 @@ Route::middleware(['auth'])
         Route::post('publications/import', [PublicationController::class, 'importBibtex'])
             ->name('publications.import.store');
         Route::resource('publications', PublicationController::class)->except(['show']);
+        Route::resource('videos', VideoController::class)->except(['show']);
     });
 
 

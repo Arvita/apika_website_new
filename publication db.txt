@@ -1,0 +1,198 @@
+Saya sedang mengerjakan project Laravel untuk website akademik Arvita Agus Kurniasari / arvitaagusk.com.
+
+Konteks project:
+- Stack: Laravel + Blade + Vite + Tailwind.
+- Website frontend sudah memiliki tema akademik premium: ivory/cream, forest green, muted gold/olive, dark mode, rounded cards, smooth clean style.
+- Logo/favicons sudah dibuat dengan konsep AAK teknologi/academic:
+  - public/assets/brand/logo-aak-light.png
+  - public/assets/brand/logo-aak-dark.png
+  - public/assets/brand/favicon-aak.png
+- Layout frontend utama ada di:
+  resources/views/frontend/layouts/app.blade.php
+- Home frontend ada di:
+  resources/views/frontend/pages/home.blade.php
+- Footer sudah final: simple floating/clean, mengikuti dark/light mode.
+- Login auth sudah berhasil dan template login sudah disesuaikan tema, memakai:
+  resources/views/layouts/guest.blade.php
+  resources/views/auth/login.blade.php
+
+Admin panel:
+- Login/logout sudah berhasil.
+- Dashboard admin sudah dibuat dengan konsep “Theme B — Topbar + Minimal Cards”.
+- Admin layout final ada di:
+  resources/views/admin/layouts/app.blade.php
+- Dashboard admin final ada di:
+  resources/views/admin/dashboard.blade.php
+- Icon admin dibuat partial:
+  resources/views/admin/partials/icon.blade.php
+- Dashboard sudah punya sidebar, topbar, dark/light mode, collapse sidebar desktop, slide sidebar mobile.
+- Tampilan admin sempat kacau karena icon membesar dan sidebar menimpa konten, lalu sudah diperbaiki dengan CSS scoped sendiri di admin layout.
+- Proporsi admin sudah dikecilkan agar tidak terlalu besar.
+- Tombol hide/collapse sidebar sudah ditambahkan dengan Alpine:
+  x-data="{ sidebarOpen: false, sidebarCollapsed: false }"
+  dan class:
+  admin-sidebar.is-collapsed
+  admin-main.is-expanded
+
+Routing utama:
+- routes/web.php sudah pakai:
+  use Illuminate\Http\Request;
+  use Illuminate\Support\Facades\Route;
+  use App\Http\Controllers\Admin\PublicationController;
+  use App\Models\Publication;
+
+Frontend routes:
+- / => frontend.pages.home, name home
+- /about => frontend.pages.about
+- /courses => frontend.pages.courses, name courses.index
+- /publications => ambil dari database Publication::published(), name publications.index
+- /videos => frontend.pages.videos
+- /portfolio => frontend.pages.portfolio
+- /supervisions => frontend.pages.supervisions
+- /contact => frontend.pages.contact
+- /language/{locale} untuk switch id/en
+
+Admin routes:
+- /dashboard redirect ke admin.dashboard
+- prefix /admin, name admin., middleware auth
+- GET /admin => admin.dashboard
+- GET /admin/publications/import => publications.import
+- POST /admin/publications/import => publications.import.store
+- Route::resource('publications', PublicationController::class)->except(['show'])
+
+Penting:
+- Route import harus diletakkan sebelum Route::resource publications.
+- Frontend home tidak boleh pakai route research karena research nantinya dianggap bagian dari publications. Kalau ada route('research') di home, ganti ke route('publications.index').
+
+Publications module:
+Sudah dibuat CRUD publications:
+- Model:
+  app/Models/Publication.php
+- Migration:
+  database/migrations/...create_publications_table.php
+- Controller:
+  app/Http/Controllers/Admin/PublicationController.php
+- Views:
+  resources/views/admin/publications/index.blade.php
+  resources/views/admin/publications/create.blade.php
+  resources/views/admin/publications/edit.blade.php
+  resources/views/admin/publications/_form.blade.php
+  resources/views/admin/publications/import.blade.php
+
+Fields publications:
+- title
+- title_en
+- slug
+- authors
+- year
+- venue
+- publisher
+- volume
+- issue
+- pages
+- type
+- source
+- doi
+- abstract
+- abstract_en
+- keywords
+- research_area
+- google_scholar_url
+- sinta_url
+- scopus_url
+- journal_url
+- pdf_url
+- citation_count
+- is_featured
+- is_published
+- published_at
+- sort_order
+
+PublicationController:
+- index: search/filter q/type/status, paginate 10
+- create/store
+- edit/update
+- destroy
+- importForm
+- importBibtex
+- findExistingPublication
+- mapBibtexType
+- uniqueSlug
+- validatedData
+- prepareData
+
+BibTeX import:
+- Parser dibuat di:
+  app/Support/BibtexParser.php
+- Import alur:
+  Google Scholar BibTeX/paste hasil scraping lokal -> /admin/publications/import -> simpan ke database.
+- Scraping langsung dari server ChatGPT tidak stabil karena Google Scholar bisa 403/CAPTCHA.
+- Solusi yang dipakai: jalankan JavaScript di browser lokal pada halaman Google Scholar:
+  https://scholar.google.com/citations?user=Yn7_99QAAAAJ&hl=en&cstart=0&pagesize=100
+  lalu klik Show More sampai semua data tampil, script akan bikin textarea BibTeX, copy lalu paste ke import admin.
+- Data Arvita Google Scholar total sekitar 42 artikel.
+- Import berhasil membuat data masuk ke admin/publications.
+
+Frontend publications:
+- File:
+  resources/views/frontend/pages/publications/index.blade.php
+- Data ambil dari database:
+  $publications = Publication::published()
+      ->orderByDesc('year')
+      ->orderBy('sort_order')
+      ->latest()
+      ->paginate(9);
+- Pagination default Laravel sempat terlihat jelek.
+- Solusi:
+  ganti:
+  {{ $publications->links() }}
+  menjadi:
+  {{ $publications->onEachSide(1)->links('vendor.pagination.academic') }}
+- Buat custom pagination di:
+  resources/views/vendor/pagination/academic.blade.php
+- Style pagination harus senada dengan frontend: ivory, green, rounded, dark mode.
+
+Dashboard update terakhir:
+- Saya minta agar dashboard admin TIDAK diubah semua.
+- Hanya card “Publications” saja yang ambil dari database.
+- Jangan ubah Recent Items, Quick Links, Content Management, atau cards lain.
+- Di routes/web.php admin dashboard harus cukup:
+  Route::get('/', function () {
+      $publicationCount = Publication::count();
+      return view('admin.dashboard', compact('publicationCount'));
+  })->name('dashboard');
+- Di resources/views/admin/dashboard.blade.php, array $stats cukup ubah hanya Publications:
+  $stats = [
+      ['label' => 'Publications', 'value' => $publicationCount ?? 0, 'desc' => 'Total publications', 'icon' => 'book', 'tone' => 'green'],
+      ['label' => 'Courses', 'value' => '0', 'desc' => 'Total courses', 'icon' => 'cap', 'tone' => 'gold'],
+      ['label' => 'Videos', 'value' => '0', 'desc' => 'Total videos', 'icon' => 'video', 'tone' => 'green'],
+      ['label' => 'Portfolio Items', 'value' => '0', 'desc' => 'Total portfolio items', 'icon' => 'briefcase', 'tone' => 'gold'],
+  ];
+- Ini berarti hanya card Publications yang dinamis dari database, card lainnya tetap 0.
+
+Design preferences:
+- User tidak suka tampilan kaku/jadul/terlalu besar.
+- Jangan buat admin seperti landing page terlalu ramai.
+- Style yang disukai:
+  clean, simple, premium, soft academic, topbar minimal cards, ivory/forest green/muted gold, rounded, spacing rapi.
+- Jangan mengubah desain final besar-besaran tanpa diminta.
+- Kalau memperbaiki, patch minimal sesuai request.
+
+Common commands:
+- Clear cache:
+  php artisan view:clear
+  php artisan route:clear
+  php artisan config:clear
+  php artisan cache:clear
+  php artisan optimize:clear
+- Build:
+  npm run build
+- Development:
+  npm run dev
+- Migrate:
+  php artisan migrate
+- Route check:
+  php artisan route:list --name=admin.publications
+  php artisan route:list --name=admin.publications.import
+
+Tolong lanjutkan dari konteks ini tanpa mengulang setup dari awal. Fokus bantu patch kode Laravel/Blade secara praktis, beri versi full file hanya kalau saya minta “versi full”. Kalau saya minta betulkan bagian tertentu, jangan rombak semua.
