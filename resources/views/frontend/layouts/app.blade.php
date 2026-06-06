@@ -1,14 +1,19 @@
 @php
-    $locale = session('locale', app()->getLocale() ?: 'id');
-    $locale = in_array($locale, ['id', 'en']) ? $locale : 'id';
+    $locale = request()->cookie('locale') ?: session('locale', app()->getLocale() ?: 'id');
+    $locale = in_array($locale, ['id', 'en'], true) ? $locale : 'id';
 
     app()->setLocale($locale);
 
     $nextLocale = $locale === 'id' ? 'en' : 'id';
 
+    $nextLocale = $locale === 'id' ? 'en' : 'id';
+
     $languageUrl = \Illuminate\Support\Facades\Route::has('language.switch')
-        ? route('language.switch', $nextLocale)
-        : url('/language/' . $nextLocale);
+    ? route('language.switch', [
+        'locale' => $nextLocale,
+        'redirect' => url()->current(),
+    ])
+    : url('/language/' . $nextLocale . '?redirect=' . urlencode(url()->current()));
 
     $labels = [
         'id' => [

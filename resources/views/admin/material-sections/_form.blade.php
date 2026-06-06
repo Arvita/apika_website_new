@@ -1,5 +1,8 @@
 @php
-    $selectedMaterialId = old('course_material_id', $selectedMaterialId ?? $section->course_material_id ?? request('material_id'));
+    $selectedMaterialId = old(
+        'course_material_id',
+        $selectedMaterialId ?? ($section->course_material_id ?? request('material_id')),
+    );
     $currentMethod = $method ?? 'POST';
 
     $selectedMaterial = $materials->firstWhere('id', (int) $selectedMaterialId);
@@ -333,7 +336,7 @@
     </div>
 
     <a href="{{ $selectedMaterialId ? route('admin.materials.edit', $selectedMaterialId) : route('admin.materials.index') }}"
-       class="pub-btn secondary">
+        class="pub-btn secondary">
         Back
     </a>
 </div>
@@ -353,7 +356,7 @@
 @endif
 
 <div class="pub-panel">
-    <form method="POST" action="{{ $action }}" class="pub-form">
+    <form method="POST" action="{{ $action }}" class="pub-form" enctype="multipart/form-data">
         @csrf
 
         @if ($currentMethod !== 'POST')
@@ -385,17 +388,18 @@
                     <label for="type" class="pub-label">Section Type *</label>
                     <select id="type" name="type" required class="pub-select">
                         @foreach ([
-                            'content' => 'Content',
-                            'heading' => 'Heading',
-                            'code' => 'Code',
-                            'callout' => 'Callout',
-                            'image' => 'Image',
-                            'video' => 'Video',
-                            'embed' => 'Embed',
-                            'quiz' => 'Quiz',
-                            'file' => 'File',
-                            'link' => 'Link',
-                        ] as $value => $label)
+        'content' => 'Content',
+        'heading' => 'Heading',
+        'code' => 'Code',
+        'callout' => 'Callout',
+        'image' => 'Image',
+        'video' => 'Video',
+        'embed' => 'Embed',
+        'quiz' => 'Quiz',
+        'file' => 'File',
+        'link' => 'Link',
+        'slide' => 'Slide / Demo File',
+    ] as $value => $label)
                             <option value="{{ $value }}" @selected(old('type', $section->type ?: 'content') === $value)>
                                 {{ $label }}
                             </option>
@@ -411,15 +415,9 @@
             <div class="pub-grid" style="margin-top:16px;">
                 <div class="pub-field">
                     <label for="title" class="pub-label">Title ID *</label>
-                    <input
-                        id="title"
-                        name="title"
-                        type="text"
-                        required
-                        value="{{ old('title', $section->title) }}"
-                        class="pub-input"
-                        placeholder="Pengantar File Handling"
-                    >
+                    <input id="title" name="title" type="text" required
+                        value="{{ old('title', $section->title) }}" class="pub-input"
+                        placeholder="Pengantar File Handling">
 
                     @error('title')
                         <div class="pub-error">{{ $message }}</div>
@@ -428,14 +426,9 @@
 
                 <div class="pub-field">
                     <label for="title_en" class="pub-label">Title English</label>
-                    <input
-                        id="title_en"
-                        name="title_en"
-                        type="text"
-                        value="{{ old('title_en', $section->title_en) }}"
-                        class="pub-input"
-                        placeholder="Introduction to File Handling"
-                    >
+                    <input id="title_en" name="title_en" type="text"
+                        value="{{ old('title_en', $section->title_en) }}" class="pub-input"
+                        placeholder="Introduction to File Handling">
 
                     @error('title_en')
                         <div class="pub-error">{{ $message }}</div>
@@ -446,14 +439,8 @@
             <div class="pub-grid" style="margin-top:16px;">
                 <div class="pub-field">
                     <label for="sort_order" class="pub-label">Sort Order</label>
-                    <input
-                        id="sort_order"
-                        name="sort_order"
-                        type="number"
-                        min="0"
-                        value="{{ old('sort_order', $section->sort_order ?? 0) }}"
-                        class="pub-input"
-                    >
+                    <input id="sort_order" name="sort_order" type="number" min="0"
+                        value="{{ old('sort_order', $section->sort_order ?? 0) }}" class="pub-input">
 
                     @error('sort_order')
                         <div class="pub-error">{{ $message }}</div>
@@ -462,14 +449,9 @@
 
                 <div class="pub-field">
                     <label for="code_language" class="pub-label">Code Language</label>
-                    <input
-                        id="code_language"
-                        name="code_language"
-                        type="text"
-                        value="{{ old('code_language', $section->code_language) }}"
-                        class="pub-input"
-                        placeholder="php, javascript, html, css"
-                    >
+                    <input id="code_language" name="code_language" type="text"
+                        value="{{ old('code_language', $section->code_language) }}" class="pub-input"
+                        placeholder="php, javascript, html, css">
 
                     <div class="pub-help">Isi hanya kalau type = code.</div>
 
@@ -486,12 +468,8 @@
             <div class="pub-grid">
                 <div class="pub-field">
                     <label for="body" class="pub-label">Body ID</label>
-                    <textarea
-                        id="body"
-                        name="body"
-                        class="pub-textarea tall"
-                        placeholder="Isi sub materi dalam Bahasa Indonesia..."
-                    >{{ old('body', $section->body) }}</textarea>
+                    <textarea id="body" name="body" class="pub-textarea tall"
+                        placeholder="Isi sub materi dalam Bahasa Indonesia...">{{ old('body', $section->body) }}</textarea>
 
                     @error('body')
                         <div class="pub-error">{{ $message }}</div>
@@ -500,12 +478,7 @@
 
                 <div class="pub-field">
                     <label for="body_en" class="pub-label">Body English</label>
-                    <textarea
-                        id="body_en"
-                        name="body_en"
-                        class="pub-textarea tall"
-                        placeholder="English sub material content..."
-                    >{{ old('body_en', $section->body_en) }}</textarea>
+                    <textarea id="body_en" name="body_en" class="pub-textarea tall" placeholder="English sub material content...">{{ old('body_en', $section->body_en) }}</textarea>
 
                     @error('body_en')
                         <div class="pub-error">{{ $message }}</div>
@@ -519,12 +492,7 @@
 
             <div class="pub-field">
                 <label for="code" class="pub-label">Code</label>
-                <textarea
-                    id="code"
-                    name="code"
-                    class="pub-textarea tall"
-                    placeholder="$file = fopen('data.txt', 'r');"
-                >{{ old('code', $section->code) }}</textarea>
+                <textarea id="code" name="code" class="pub-textarea tall" placeholder="$file = fopen('data.txt', 'r');">{{ old('code', $section->code) }}</textarea>
 
                 @error('code')
                     <div class="pub-error">{{ $message }}</div>
@@ -534,14 +502,9 @@
             <div class="pub-grid" style="margin-top:16px;">
                 <div class="pub-field">
                     <label for="media_url" class="pub-label">Media URL</label>
-                    <input
-                        id="media_url"
-                        name="media_url"
-                        type="text"
-                        value="{{ old('media_url', $section->media_url) }}"
-                        class="pub-input"
-                        placeholder="Image URL, YouTube embed URL, file URL..."
-                    >
+                    <input id="media_url" name="media_url" type="text"
+                        value="{{ old('media_url', $section->media_url) }}" class="pub-input"
+                        placeholder="Image URL, YouTube embed URL, file URL...">
 
                     @error('media_url')
                         <div class="pub-error">{{ $message }}</div>
@@ -550,14 +513,57 @@
 
                 <div class="pub-field">
                     <label for="button_label" class="pub-label">Button Label</label>
-                    <input
-                        id="button_label"
-                        name="button_label"
-                        type="text"
-                        value="{{ old('button_label', $section->button_label) }}"
-                        class="pub-input"
-                        placeholder="Download Materi"
-                    >
+                    <input id="button_label" name="button_label" type="text"
+                        value="{{ old('button_label', $section->button_label) }}" class="pub-input"
+                        placeholder="Download Materi">
+
+                    @error('button_label')
+                        <div class="pub-error">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="pub-grid" style="margin-top:16px;">
+                <div class="pub-field">
+                    <label for="media_url" class="pub-label">Media URL</label>
+                    <input id="media_url" name="media_url" type="text"
+                        value="{{ old('media_url', $section->media_url) }}" class="pub-input"
+                        placeholder="Image URL, YouTube embed URL, file URL...">
+
+                    @error('media_url')
+                        <div class="pub-error">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="pub-field full" style="margin-top:16px;">
+                    <label for="demo_file" class="pub-label">Upload Slide / Demo File</label>
+
+                    <input id="demo_file" name="demo_file" type="file" accept=".html,.htm,.php,.pdf,.ppt,.pptx"
+                        class="pub-input" style="padding-top:9px;">
+
+                    <div class="pub-help">
+                        Upload file HTML, PHP static, PDF, PPT, atau PPTX. Untuk contoh seperti minggu-9.php, pilih type
+                        <strong>Slide / Demo File</strong>.
+                        File PHP yang berisi tag aktif &lt;?php tidak akan dijalankan demi keamanan.
+                    </div>
+
+                    @if ($section->media_url)
+                        <div class="pub-help">
+                            File saat ini:
+                            <strong>{{ basename($section->media_url) }}</strong>
+                        </div>
+                    @endif
+
+                    @error('demo_file')
+                        <div class="pub-error">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <div class="pub-field">
+                    <label for="button_label" class="pub-label">Button Label</label>
+                    <input id="button_label" name="button_label" type="text"
+                        value="{{ old('button_label', $section->button_label) }}" class="pub-input"
+                        placeholder="Open resource">
 
                     @error('button_label')
                         <div class="pub-error">{{ $message }}</div>
@@ -567,14 +573,9 @@
 
             <div class="pub-field" style="margin-top:16px;">
                 <label for="button_url" class="pub-label">Button URL</label>
-                <input
-                    id="button_url"
-                    name="button_url"
-                    type="text"
-                    value="{{ old('button_url', $section->button_url) }}"
-                    class="pub-input"
-                    placeholder="https://..."
-                >
+                <input id="button_url" name="button_url" type="text"
+                    value="{{ old('button_url', $section->button_url) }}" class="pub-input"
+                    placeholder="https://...">
 
                 @error('button_url')
                     <div class="pub-error">{{ $message }}</div>
@@ -587,12 +588,7 @@
 
             <div class="pub-check-grid">
                 <label class="pub-check">
-                    <input
-                        type="checkbox"
-                        name="is_published"
-                        value="1"
-                        @checked(old('is_published', $section->exists ? $section->is_published : true))
-                    >
+                    <input type="checkbox" name="is_published" value="1" @checked(old('is_published', $section->exists ? $section->is_published : true))>
                     Published
                 </label>
             </div>
@@ -601,15 +597,13 @@
         <div class="pub-form-actions">
             <div style="display:flex;gap:10px;flex-wrap:wrap;">
                 <a href="{{ $selectedMaterialId ? route('admin.materials.edit', $selectedMaterialId) : route('admin.materials.index') }}"
-                   class="pub-btn secondary">
+                    class="pub-btn secondary">
                     Cancel
                 </a>
 
                 @if ($section->exists && $section->material && $section->material->course && Route::has('materials.show'))
                     <a href="{{ route('materials.show', [$section->material->course, $section->material]) }}"
-                       target="_blank"
-                       rel="noopener"
-                       class="pub-btn secondary">
+                        target="_blank" rel="noopener" class="pub-btn secondary">
                         View Material
                     </a>
                 @endif

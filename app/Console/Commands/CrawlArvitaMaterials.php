@@ -7,6 +7,7 @@ use App\Models\CourseMaterial;
 use App\Models\CourseMaterialSection;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CrawlArvitaMaterials extends Command
@@ -15,7 +16,7 @@ class CrawlArvitaMaterials extends Command
         {--dry-run : Preview hasil crawl tanpa simpan database}
         {--reset : Hapus course lama yang slug-nya sama sebelum import}';
 
-    protected $description = 'Crawl course materials from old arvitaagusk.com pages into dynamic course/material tables';
+    protected $description = 'Crawl SABO and Pemrograman Dasar materials from arvitaagusk.com into slide/demo file format';
 
     private string $baseUrl = 'https://arvitaagusk.com';
 
@@ -24,7 +25,7 @@ class CrawlArvitaMaterials extends Command
         $dryRun = (bool) $this->option('dry-run');
         $reset = (bool) $this->option('reset');
 
-        $this->info('Crawling materi lama dari arvitaagusk.com...');
+        $this->info('Crawling materi dari arvitaagusk.com...');
         $this->line($dryRun ? 'Mode: DRY RUN, tidak menyimpan database.' : 'Mode: IMPORT DATABASE.');
 
         foreach ($this->courseMap() as $courseData) {
@@ -32,8 +33,24 @@ class CrawlArvitaMaterials extends Command
             $this->info("Course: {$courseData['title']}");
 
             if ($reset && ! $dryRun) {
-                Course::where('slug', $courseData['slug'])->delete();
-                $this->warn("Existing course '{$courseData['slug']}' dihapus.");
+                $existingCourse = Course::where('slug', $courseData['slug'])->first();
+
+                if ($existingCourse) {
+                    foreach ($existingCourse->materials as $material) {
+                        foreach ($material->sections as $section) {
+                            if (
+                                $section->media_url &&
+                                Str::startsWith($section->media_url, 'course-section-files/') &&
+                                Storage::exists($section->media_url)
+                            ) {
+                                Storage::delete($section->media_url);
+                            }
+                        }
+                    }
+
+                    $existingCourse->delete();
+                    $this->warn("Existing course '{$courseData['slug']}' dihapus.");
+                }
             }
 
             $course = null;
@@ -46,34 +63,44 @@ class CrawlArvitaMaterials extends Command
                         'title_en' => $courseData['title_en'] ?? null,
                         'summary' => $courseData['summary'] ?? null,
                         'summary_en' => $courseData['summary_en'] ?? null,
+                        'intro' => $courseData['intro'] ?? ($courseData['summary'] ?? null),
+                        'intro_en' => $courseData['intro_en'] ?? ($courseData['summary_en'] ?? null),
                         'category' => $courseData['category'] ?? null,
                         'level' => $courseData['level'] ?? null,
                         'is_featured' => $courseData['is_featured'] ?? false,
                         'is_published' => true,
                         'published_at' => now(),
                         'sort_order' => $courseData['sort_order'] ?? 0,
+                        'meta_title' => $courseData['title'],
+                        'meta_description' => Str::limit(strip_tags($courseData['summary'] ?? ''), 155),
                     ]
                 );
             }
 
             foreach ($courseData['materials'] as $materialData) {
                 $this->line(" - {$materialData['title']}");
+                $this->line("   URL: {$materialData['url']}");
 
                 $page = $this->crawlPage($materialData['url']);
 
-                $title = $page['title'] ?: $materialData['title'];
-                $sections = $page['sections'];
-
-                if ($dryRun) {
-                    $this->line("   URL: {$materialData['url']}");
-                    $this->line("   Sections: " . count($sections));
-
-                    foreach (array_slice($sections, 0, 4) as $section) {
-                        $this->line("     - {$section['title']}");
-                    }
-
+                if (! $page['html']) {
+                    $this->warn('   Halaman gagal diambil. Dilewati.');
                     continue;
                 }
+
+                $title = $page['title'] ?: $materialData['title'];
+                $summary = $materialData['summary'] ?: ($page['summary'] ?: 'Materi pembelajaran dari arvitaagusk.com.');
+
+                $filePath = $this->buildStoragePath($courseData['slug'], $materialData['slug']);
+
+                if ($dryRun) {
+                    $this->line("   Title: {$title}");
+                    $this->line("   File: {$filePath}");
+                    $this->line("   Type: slide");
+                    continue;
+                }
+
+                Storage::put($filePath, $this->preparePhpFile($page['html'], $materialData['url']));
 
                 $material = CourseMaterial::updateOrCreate(
                     [
@@ -85,37 +112,52 @@ class CrawlArvitaMaterials extends Command
                         'title_en' => $materialData['title_en'] ?? null,
                         'week_label' => $materialData['week_label'] ?? null,
                         'week_number' => $materialData['week_number'] ?? null,
-                        'summary' => $materialData['summary'] ?? $page['summary'],
-                        'content' => $page['intro'],
+                        'summary' => $summary,
+                        'summary_en' => $materialData['summary_en'] ?? null,
+                        'content' => $summary,
+                        'content_en' => $materialData['summary_en'] ?? null,
                         'material_type' => $materialData['material_type'] ?? 'lesson',
                         'external_url' => $materialData['url'],
+                        'file_path' => $filePath,
+                        'related_video_url' => null,
                         'is_published' => true,
                         'published_at' => now(),
                         'sort_order' => $materialData['sort_order'] ?? ($materialData['week_number'] ?? 0),
                         'meta_title' => $title . ' | ' . $courseData['title'],
-                        'meta_description' => Str::limit(strip_tags($materialData['summary'] ?? $page['summary'] ?? ''), 155),
+                        'meta_description' => Str::limit(strip_tags($summary), 155),
                     ]
                 );
 
-                $material->sections()->delete();
-
-                foreach ($sections as $index => $section) {
-                    CourseMaterialSection::create([
-                        'course_material_id' => $material->id,
-                        'title' => $section['title'],
-                        'type' => $section['type'],
-                        'body' => $section['body'],
-                        'code' => $section['code'],
-                        'code_language' => $section['code_language'],
-                        'media_url' => null,
-                        'button_label' => null,
-                        'button_url' => null,
-                        'sort_order' => $index + 1,
-                        'is_published' => true,
-                    ]);
+                foreach ($material->sections as $section) {
+                    if (
+                        $section->media_url &&
+                        Str::startsWith($section->media_url, 'course-section-files/') &&
+                        Storage::exists($section->media_url) &&
+                        $section->media_url !== $filePath
+                    ) {
+                        Storage::delete($section->media_url);
+                    }
                 }
 
-                $this->line("   Imported sections: " . count($sections));
+                $material->sections()->delete();
+
+                CourseMaterialSection::create([
+                    'course_material_id' => $material->id,
+                    'title' => $title,
+                    'title_en' => $materialData['title_en'] ?? null,
+                    'type' => 'slide',
+                    'body' => $summary,
+                    'body_en' => $materialData['summary_en'] ?? null,
+                    'code' => null,
+                    'code_language' => null,
+                    'media_url' => $filePath,
+                    'button_label' => 'Buka sumber asli',
+                    'button_url' => $materialData['url'],
+                    'sort_order' => 1,
+                    'is_published' => true,
+                ]);
+
+                $this->info("   Imported as slide file: {$filePath}");
             }
         }
 
@@ -128,11 +170,11 @@ class CrawlArvitaMaterials extends Command
     private function crawlPage(string $url): array
     {
         try {
-            $response = Http::timeout(30)
-                ->retry(2, 500)
+            $response = Http::timeout(40)
+                ->retry(2, 700)
                 ->withHeaders([
-                    'User-Agent' => 'Mozilla/5.0 ArvitaAcademicCrawler/1.0',
-                    'Accept' => 'text/html,application/xhtml+xml',
+                    'User-Agent' => 'Mozilla/5.0 (compatible; ArvitaAcademicCrawler/1.0)',
+                    'Accept' => 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
                 ])
                 ->get($url);
 
@@ -140,27 +182,65 @@ class CrawlArvitaMaterials extends Command
                 $this->warn("   Gagal fetch {$url}. Status: {$response->status()}");
 
                 return [
+                    'html' => null,
                     'title' => null,
                     'summary' => null,
-                    'intro' => null,
-                    'sections' => [],
                 ];
             }
 
-            return $this->parseHtml($response->body());
+            $html = $response->body();
+
+            return [
+                'html' => $html,
+                'title' => $this->extractTitle($html),
+                'summary' => $this->extractSummary($html),
+            ];
         } catch (\Throwable $e) {
             $this->warn("   Error fetch {$url}: {$e->getMessage()}");
 
             return [
+                'html' => null,
                 'title' => null,
                 'summary' => null,
-                'intro' => null,
-                'sections' => [],
             ];
         }
     }
 
-    private function parseHtml(string $html): array
+    private function buildStoragePath(string $courseSlug, string $materialSlug): string
+    {
+        return 'course-section-files/' . $courseSlug . '-' . $materialSlug . '.php';
+    }
+
+    private function preparePhpFile(string $html, string $pageUrl): string
+    {
+        $html = trim($html);
+
+        if (Str::contains($html, ['<?php', '<?='])) {
+            return $html;
+        }
+
+        $baseTag = '<base href="' . htmlspecialchars($pageUrl, ENT_QUOTES, 'UTF-8') . '">';
+
+        if (preg_match('/<head([^>]*)>/i', $html)) {
+            $html = preg_replace('/<head([^>]*)>/i', '<head$1>' . PHP_EOL . $baseTag, $html, 1) ?: $html;
+
+            return $html;
+        }
+
+        return '<!doctype html>
+<html lang="id">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    ' . $baseTag . '
+</head>
+<body>
+' . $html . '
+</body>
+</html>';
+    }
+
+    private function extractTitle(string $html): ?string
     {
         libxml_use_internal_errors(true);
 
@@ -169,206 +249,60 @@ class CrawlArvitaMaterials extends Command
 
         $xpath = new \DOMXPath($dom);
 
-        foreach ($xpath->query('//script|//style|//nav|//footer|//header|//noscript') as $node) {
-            $node->parentNode?->removeChild($node);
+        foreach (['//h1', '//title'] as $query) {
+            $node = $xpath->query($query)?->item(0);
+
+            if ($node) {
+                $title = $this->cleanText($node->textContent);
+
+                if ($title !== '') {
+                    return $title;
+                }
+            }
         }
 
-        $title = $this->firstText($xpath, '//h1') ?: $this->firstText($xpath, '//title');
-
-        $h2Nodes = $xpath->query('//h2');
-
-        $sections = [];
-
-        foreach ($h2Nodes as $h2) {
-            $sectionTitle = $this->cleanText($h2->textContent);
-
-            if (! $sectionTitle || $this->shouldSkipSection($sectionTitle)) {
-                continue;
-            }
-
-            $body = $this->collectUntilNextHeading($h2);
-
-            if (! $body) {
-                continue;
-            }
-
-            $cleanBody = $this->cleanBody($body);
-
-            if (! $cleanBody) {
-                continue;
-            }
-
-            [$type, $code, $language] = $this->detectSectionType($sectionTitle, $cleanBody);
-
-            $sections[] = [
-                'title' => $sectionTitle,
-                'type' => $type,
-                'body' => $type === 'code' ? null : $cleanBody,
-                'code' => $code,
-                'code_language' => $language,
-            ];
-        }
-
-        $summary = null;
-
-        if (count($sections)) {
-            $summary = Str::limit($sections[0]['body'] ?: $sections[0]['code'] ?: '', 220);
-        }
-
-        return [
-            'title' => $title,
-            'summary' => $summary,
-            'intro' => $summary,
-            'sections' => $sections,
-        ];
+        return null;
     }
 
-    private function firstText(\DOMXPath $xpath, string $query): ?string
+    private function extractSummary(string $html): ?string
     {
-        $node = $xpath->query($query)?->item(0);
+        libxml_use_internal_errors(true);
 
-        if (! $node) {
-            return null;
-        }
+        $dom = new \DOMDocument();
+        $dom->loadHTML('<?xml encoding="utf-8" ?>' . $html);
 
-        return $this->cleanText($node->textContent);
-    }
+        $xpath = new \DOMXPath($dom);
 
-    private function collectUntilNextHeading(\DOMNode $start): string
-    {
-        $texts = [];
-        $node = $start->nextSibling;
+        $meta = $xpath->query('//meta[@name="description"]')?->item(0);
 
-        while ($node) {
-            if ($node instanceof \DOMElement && in_array(strtolower($node->tagName), ['h1', 'h2'], true)) {
-                break;
+        if ($meta instanceof \DOMElement) {
+            $description = $this->cleanText($meta->getAttribute('content'));
+
+            if ($description !== '') {
+                return Str::limit($description, 220);
             }
+        }
 
-            $text = $this->nodeText($node);
+        $paragraph = $xpath->query('//p')?->item(0);
 
-            if ($text) {
-                $texts[] = $text;
+        if ($paragraph) {
+            $text = $this->cleanText($paragraph->textContent);
+
+            if ($text !== '') {
+                return Str::limit($text, 220);
             }
-
-            $node = $node->nextSibling;
         }
 
-        return implode("\n", array_filter($texts));
-    }
-
-    private function nodeText(\DOMNode $node): string
-    {
-        if ($node instanceof \DOMText) {
-            return $this->cleanText($node->textContent);
-        }
-
-        if (! $node instanceof \DOMElement) {
-            return '';
-        }
-
-        $tag = strtolower($node->tagName);
-
-        if (in_array($tag, ['script', 'style', 'button', 'svg'], true)) {
-            return '';
-        }
-
-        $text = $node->textContent ?? '';
-
-        return $this->cleanText($text);
+        return null;
     }
 
     private function cleanText(?string $text): string
     {
         $text = html_entity_decode($text ?? '', ENT_QUOTES | ENT_HTML5, 'UTF-8');
         $text = preg_replace('/\x{00A0}/u', ' ', $text);
-        $text = preg_replace('/[ \t]+/', ' ', $text);
-        $text = preg_replace('/\n{3,}/', "\n\n", $text);
+        $text = preg_replace('/\s+/u', ' ', $text);
 
         return trim($text ?? '');
-    }
-
-    private function cleanBody(string $body): string
-    {
-        $lines = preg_split('/\R/u', $body) ?: [];
-
-        $clean = [];
-
-        foreach ($lines as $line) {
-            $line = $this->cleanText($line);
-
-            if ($line === '') {
-                continue;
-            }
-
-            if ($this->isNoiseLine($line)) {
-                continue;
-            }
-
-            $clean[] = $line;
-        }
-
-        $clean = array_values(array_unique($clean));
-
-        return trim(implode("\n", $clean));
-    }
-
-    private function isNoiseLine(string $line): bool
-    {
-        $lower = Str::lower($line);
-
-        $noise = [
-            'sebelumnya berikutnya',
-            'sebelumnya mulai ulang',
-            'presentasi',
-            'copyright',
-            '©',
-            'sign in',
-            'sign up',
-            'email password',
-        ];
-
-        foreach ($noise as $item) {
-            if (str_contains($lower, $item)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private function shouldSkipSection(string $title): bool
-    {
-        $lower = Str::lower($title);
-
-        return in_array($lower, [
-            'download materi',
-        ], true);
-    }
-
-    private function detectSectionType(string $title, string $body): array
-    {
-        $sample = Str::lower($title . "\n" . $body);
-
-        $looksLikeCode = str_contains($body, '<?php')
-            || preg_match('/\$[a-zA-Z_][a-zA-Z0-9_]*/', $body)
-            || str_contains($body, 'function ')
-            || str_contains($body, 'class ')
-            || str_contains($body, 'echo ')
-            || str_contains($body, '<form')
-            || str_contains($body, '<input')
-            || str_contains($body, '</');
-
-        if ($looksLikeCode) {
-            $language = 'php';
-
-            if (str_contains($sample, '<form') || str_contains($sample, '<input') || str_contains($sample, '<textarea')) {
-                $language = 'html';
-            }
-
-            return ['code', $body, $language];
-        }
-
-        return ['content', null, null];
     }
 
     private function courseMap(): array
@@ -380,6 +314,8 @@ class CrawlArvitaMaterials extends Command
                 'slug' => 'pemrograman-dasar',
                 'summary' => 'Konsep fundamental yang membentuk fondasi untuk membuat program komputer.',
                 'summary_en' => 'Fundamental concepts that build the foundation for creating computer programs.',
+                'intro' => 'Course ini berisi materi Pemrograman Dasar yang ditampilkan sebagai file demo interaktif.',
+                'intro_en' => 'This course contains Basic Programming materials displayed as interactive demo files.',
                 'category' => 'Programming',
                 'level' => 'Beginner',
                 'is_featured' => true,
@@ -463,6 +399,8 @@ class CrawlArvitaMaterials extends Command
                 'slug' => 'sabo',
                 'summary' => 'Paradigma pemrograman yang menyusun kode berdasarkan objek dan data, bukan fungsi atau logika saja.',
                 'summary_en' => 'A programming paradigm that organizes code around objects and data.',
+                'intro' => 'Course ini berisi materi Sistem Aplikasi Berbasis Object yang ditampilkan sebagai file demo interaktif.',
+                'intro_en' => 'This course contains Object-Oriented Programming materials displayed as interactive demo files.',
                 'category' => 'Programming',
                 'level' => 'Intermediate',
                 'is_featured' => true,
